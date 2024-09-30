@@ -1,0 +1,22 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/SM-Post/.vs/SM-Post
+/SM-Post/Post.Query/Post.Common/bin/Debug/net8.0
+/SM-Post/Post.Query/Post.Common/obj
+/SM-Post/Post.Query/Post.Query.Api/bin/Debug/net8.0
+/SM-Post/Post.Query/Post.Query.Api/obj
+/SM-Post/Post.Query/Post.Query.Domain/bin/Debug/net8.0
+/SM-Post/Post.Query/Post.Query.Domain/obj
+/SM-Post/Post.Query/Post.Query.Infrastructure/bin/Debug/net8.0
+/SM-Post/Post.Query/Post.Query.Infrastructure/obj
+/SM-Post/Post.Cmd/Post.Cmd.Api/bin/Debug/net8.0
+/SM-Post/Post.Cmd/Post.Cmd.Api/obj
+/SM-Post/Post.Cmd/Post.Cmd.Domain/bin/Debug/net8.0
+/SM-Post/Post.Cmd/Post.Cmd.Domain/obj
+/SM-Post/Post.Cmd/Post.Cmd.Infrastructure/bin/Debug/net8.0
+/SM-Post/Post.Cmd/Post.Cmd.Infrastructure/obj
+/CQRS-ES/CQRS.Core/bin/Debug/net8.0
+/CQRS-ES/CQRS.Core/obj
