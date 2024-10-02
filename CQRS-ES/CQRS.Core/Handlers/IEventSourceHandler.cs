@@ -10,6 +10,6 @@ namespace CQRS.Core.Handlers
     public interface IEventSourceHandler<T>
     {
         Task SaveAsync(AggregateRoot aggregate);
-        Task<T> GetByIdAsnyuc(Guid aggregateId);
+        Task<T> GetByIdAsync(Guid aggregateId);
     }
 }

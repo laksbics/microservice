@@ -21,7 +21,7 @@ namespace Post.Query.Infrastructure.Converters
 
         public override BaseEvents? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (JsonDocument.TryParseValue(ref reader, out var document))
+            if (!JsonDocument.TryParseValue(ref reader, out var document))
             {
                 throw new JsonException($"Failed to parse {nameof(JsonDocument)}");
             }

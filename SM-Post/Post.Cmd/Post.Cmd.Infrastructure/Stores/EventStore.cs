@@ -4,6 +4,7 @@ using CQRS.Core.Exceptions;
 using CQRS.Core.Infrastructure;
 using CQRS.Core.Producer;
 using Post.Cmd.Domain.Aggregates;
+using Post.Cmd.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,16 @@ namespace Post.Cmd.Infrastructure.Stores
             _eventProducer = eventProducer;
         }
 
+        public async Task<List<Guid>> GetAggregateIdsAsync()
+        {
+            var eventStream = await _eventStoreRepostory.FindAllAsync();
+
+            if (eventStream == null || !eventStream.Any())
+                throw new ArgumentNullException(nameof(eventStream), "Could not retrieve event stream from the event store!");
+
+            return eventStream.Select(x => x.AggregateIdentifier).Distinct().ToList();
+        }
+
         public async Task<List<BaseEvents>> GetEventAsync(Guid aggreageId)
         {
             var eventStream = await _eventStoreRepostory.FindByAggregateId(aggreageId);
@@ -31,7 +42,7 @@ namespace Post.Cmd.Infrastructure.Stores
                 throw new AggregateNotFoundException("Incorrect Post Id provider");
             }
 
-            return eventStream.OrderBy(x=>x.Version).Select(x=>x.EventDate).ToList();
+            return eventStream.OrderBy(x=>x.Version).Select(x=>x.EventData).ToList();
         }
 
         public  async Task  SaveEventAsync(Guid AggreageId, IEnumerable<BaseEvents> events, int expectedVersion)
@@ -53,15 +64,24 @@ namespace Post.Cmd.Infrastructure.Stores
                 var eventModel = new EventModel
                 {
                     TimeStamp = DateTime.Now,
-                    AggregateIdenitifier = AggreageId,
+                    AggregateIdentifier = AggreageId,
                     AggregateType = nameof(PostAggregate),
                     Version = version,
                     EventType = eventType,
-                    EventDate = @event
+                    EventData = @event
                 };
 
                 await _eventStoreRepostory.SaveAsnyc(eventModel);
-                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+                var topic = "SocialMediaPostEvents"; // __consumer_offsets"; // Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+
+                try
+                {
+                    await _eventProducer.ProduceAsync(topic, @event);
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
         }
     }

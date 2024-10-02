@@ -19,7 +19,7 @@ namespace CQRS.Core.Domain
             return _changes;
         }
 
-        public void MarkChanges()
+        public void MarkChangesAsCommitted()
         {
             _changes.Clear();
         }
@@ -28,7 +28,7 @@ namespace CQRS.Core.Domain
         {
             var method = this.GetType().GetMethod("Apply", new Type[] {@event.GetType()});
 
-            if (method != null)
+            if (method == null)
             {
                 throw new ArgumentNullException(nameof(method), $"The Apply method was not found in the aggregate for {@event.GetType().Name}");
             }
@@ -53,5 +53,6 @@ namespace CQRS.Core.Domain
                 ApplyChange(@event, false);
             }
         }
+         
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using CQRS.Core.Consumers;
 
 namespace Post.Query.Infrastructure.Consumers
 {
@@ -25,8 +26,8 @@ namespace Post.Query.Infrastructure.Consumers
             _logger.LogInformation("Event Consumer service running");
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
-                var eventConsumer = scope.ServiceProvider.GetService<EventConsumer>();
-                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+                var eventConsumer = scope.ServiceProvider.GetRequiredService<IEventConsumer>();
+                var topic = "SocialMediaPostEvents"; //"__consumer_offsets";//Environment.GetEnvironmentVariable("KAFKA_TOPIC");
                 Task.Run(()=> eventConsumer.Consume(topic), cancellationToken);
             }
 

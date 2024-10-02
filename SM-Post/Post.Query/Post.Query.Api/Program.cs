@@ -12,16 +12,19 @@ var builder = WebApplication.CreateBuilder(args);
 Action<DbContextOptionsBuilder> ConfigurationDbContext = (o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))); //
 builder.Services.AddDbContext<DataBaseContext>(ConfigurationDbContext);
 builder.Services.AddSingleton<DatabaseContextFactory>(new DatabaseContextFactory(ConfigurationDbContext));
+
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+//builder.Services.AddScoped<IQueryHandler, QueryHandler>();
 builder.Services.AddScoped<IEventHandler, Post.Query.Infrastructure.Handlers.EventHandler>();
 builder.Services.Configure<ConsumerConfig>(builder.Configuration.GetSection(nameof(ConsumerConfig)));
-builder.Services.AddScoped<IEventConsumer, IEventConsumer>();
+builder.Services.AddScoped<IEventConsumer, EventConsumer>();
 builder.Services.AddHostedService<ConsumerHostedService>();
 
 //Create Database and tables from code
 var dataContext = builder.Services.BuildServiceProvider().GetRequiredService<DataBaseContext>();
 dataContext.Database.EnsureCreated();
+
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -46,7 +49,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

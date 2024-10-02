@@ -2,12 +2,12 @@
 {
     public interface ICommandHandler
     {
-        Task HandlerAsync(NewPostCommand command);
-        Task HandlerAsync(EditMessageCommand command);
-        Task HandlerAsync(LikePostCommand command);
-        Task HandlerAsync(AddCommentCommand command);
-        Task HandlerAsync(EditCommentCommand command);
-        Task HandlerAsync(RemoveCommentCommand command);
-        Task HandlerAsync(DeletePostCommand command);
+        Task HandleAsync(NewPostCommand command);
+        Task HandleAsync(EditMessageCommand command);
+        Task HandleAsync(LikePostCommand command);
+        Task HandleAsync(AddCommentCommand command);
+        Task HandleAsync(EditCommentCommand command);
+        Task HandleAsync(RemoveCommentCommand command);
+        Task HandleAsync(DeletePostCommand command);
     }
 }

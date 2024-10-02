@@ -12,5 +12,6 @@ namespace CQRS.Core.Infrastructure
     {
         Task SaveEventAsync(Guid AggreageId, IEnumerable<BaseEvents> events, int expectedVersion);
         Task<List<BaseEvents>> GetEventAsync(Guid AggreageId);
+        Task<List<Guid>> GetAggregateIdsAsync();
     }
 }
