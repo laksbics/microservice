@@ -117,7 +117,7 @@ namespace Post.Cmd.Domain.Aggregates
                 throw new InvalidOperationException($"THe value of {nameof(comment)} cannot be null or empty.");
             }
 
-            RaiseEvents(new CommentUpdatedEvent { Id = _id, CommentId = Guid.NewGuid(), Comment = comment, UserName = username, EditedDate = DateTime.Now });
+            RaiseEvents(new CommentUpdatedEvent { Id = _id, CommentId = commentId, Comment = comment, UserName = username, EditedDate = DateTime.Now });
         }
 
         public void Apply(CommentUpdatedEvent @event)
