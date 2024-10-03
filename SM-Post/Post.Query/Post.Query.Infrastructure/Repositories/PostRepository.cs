@@ -66,7 +66,7 @@ namespace Post.Query.Infrastructure.Repositories
             }
         }
 
-        public async  Task<List<PostEntity>> ListWithCommentsAsync(int noOflike)
+        public async  Task<List<PostEntity>> ListWithCommentsAsync()
         {
             using (DataBaseContext context = _contextFactory.CreateDbContext())
             {

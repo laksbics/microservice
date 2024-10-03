@@ -5,9 +5,11 @@ using CQRS.Core.Producer;
 using Post.Cmd.Domain.Aggregates;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ThirdParty.BouncyCastle.Asn1;
 
 namespace Post.Cmd.Infrastructure.Handler
 {
@@ -47,10 +49,10 @@ namespace Post.Cmd.Infrastructure.Handler
                 if (aggregate == null || !aggregate.Active) continue;
 
                 var events = await _eventStore.GetEventAsync(aggregateId);
-
+                var topic = "SocialMediaPostEvents"; // Environment.GetEnvironmentVariable("KAFKA_TOPIC");
                 foreach (var @event in events)
                 {
-                    var topic =  "SocialMediaPostEvents"; // Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+                    
                     await _eventProducer.ProduceAsync(topic, @event);
                 }
             }
@@ -61,5 +63,6 @@ namespace Post.Cmd.Infrastructure.Handler
             await _eventStore.SaveEventAsync(aggregate.Id, aggregate.GetUnCommitedChanges(), aggregate.Version);
             aggregate.MarkChangesAsCommitted();
         }
+ 
     }
 }

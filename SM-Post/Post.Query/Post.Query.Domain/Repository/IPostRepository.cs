@@ -16,6 +16,6 @@ namespace Post.Query.Domain.Repository
         Task<List<PostEntity>> ListAllAsync();
         Task<List<PostEntity>> ListByAuthorAsync(string author);
         Task<List<PostEntity>> ListWithLikeAsync(int noOflike);
-        Task<List<PostEntity>> ListWithCommentsAsync(int noOflike);
+        Task<List<PostEntity>> ListWithCommentsAsync();
     }
 }

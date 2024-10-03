@@ -1,15 +1,20 @@
 using Confluent.Kafka;
 using CQRS.Core.Consumers;
+using CQRS.Core.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Post.Query.Api.Queries;
+using Post.Query.Domain.Entities;
 using Post.Query.Domain.Repository;
 using Post.Query.Infrastructure.Consumers;
 using Post.Query.Infrastructure.DataAccess;
+using Post.Query.Infrastructure.Dispatchers;
 using Post.Query.Infrastructure.Handlers;
 using Post.Query.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Action<DbContextOptionsBuilder> ConfigurationDbContext = (o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))); //
+//Action<DbContextOptionsBuilder> ConfigurationDbContext = (o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+Action<DbContextOptionsBuilder> ConfigurationDbContext = o => o.UseLazyLoadingProxies().UseNpgsql(builder.Configuration.GetConnectionString("SqlServer"));
 builder.Services.AddDbContext<DataBaseContext>(ConfigurationDbContext);
 builder.Services.AddSingleton<DatabaseContextFactory>(new DatabaseContextFactory(ConfigurationDbContext));
 
@@ -20,6 +25,17 @@ builder.Services.AddScoped<IEventHandler, Post.Query.Infrastructure.Handlers.Eve
 builder.Services.Configure<ConsumerConfig>(builder.Configuration.GetSection(nameof(ConsumerConfig)));
 builder.Services.AddScoped<IEventConsumer, EventConsumer>();
 builder.Services.AddHostedService<ConsumerHostedService>();
+
+
+//register query handler methods
+var queryHandler = builder.Services.BuildServiceProvider().GetRequiredService<IQueryHandler>();
+var dispatcher = new QueryDispatcher();
+dispatcher.RegisterHandler<FindAllPostQuery>(queryHandler.handleAsync);
+dispatcher.RegisterHandler<FindPostByIdQuery>(queryHandler.handleAsync);
+dispatcher.RegisterHandler<FindPostByAuthorQuery>(queryHandler.handleAsync);
+dispatcher.RegisterHandler<FindPostsWithComments>(queryHandler.handleAsync);
+dispatcher.RegisterHandler<FindPostsWithLikesQuery>(queryHandler.handleAsync);
+builder.Services.AddSingleton<IQueryDispatcher<PostEntity>>(_ => dispatcher);
 
 //Create Database and tables from code
 var dataContext = builder.Services.BuildServiceProvider().GetRequiredService<DataBaseContext>();
