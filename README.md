@@ -1,3 +1,26 @@
+# Architecture Overview
+![image](https://github.com/user-attachments/assets/458cf14e-3473-40c6-aba0-84834fe6a4b2)
+
+
+
+
+
+
+
+## Components Used
+
+- Docker
+- Appache Kafka -- runs in docker
+- Mongo Db -- runs in Docker
+- MsSql -- runs in Docker
+
+
+
+
+
+
+## Functionalities
+
 Handle commands and raise events.
 
 Use the mediator pattern to implement command and query dispatchers.
