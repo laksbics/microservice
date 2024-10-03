@@ -19,6 +19,10 @@
 
 
 
+### Used docker desktop to deploy the microservices for real time data processing
+![image](https://github.com/user-attachments/assets/e8e03087-3bd9-4577-902f-94350c43c63c)
+
+
 
 ## Functionalities
 
